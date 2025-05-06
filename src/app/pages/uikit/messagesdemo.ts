@@ -59,7 +59,7 @@ export class MessagesDemo {
 
     email: string | undefined;
 
-    constructor(private service: MessageService) {}
+    constructor(private readonly service: MessageService) {}
 
     showInfoViaToast() {
         this.service.add({ severity: 'info', summary: 'Info Message', detail: 'PrimeNG rocks' });

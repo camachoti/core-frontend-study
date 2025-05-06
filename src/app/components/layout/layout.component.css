@@ -1,13 +1,1 @@
-.content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%; /* ou 100vh para altura total da viewport */
-}
-
-mat-sidenav-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Faz o container ocupar toda a altura da tela */
-}
 

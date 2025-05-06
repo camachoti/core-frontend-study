@@ -1,59 +1,50 @@
-import { Component } from '@angular/core';
-import {MatToolbar} from '@angular/material/toolbar';
-import {MatIcon} from '@angular/material/icon';
+import {Component, OnInit} from '@angular/core';
 import {NgIf} from '@angular/common';
-import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
-import {TranslatePipe, TranslateService} from '@ngx-translate/core';
-import {MatDivider} from '@angular/material/divider';
 import {Router, RouterLink, RouterOutlet} from '@angular/router';
-import {FooterComponent} from '../../footer/footer.component';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {LoginService} from '../../services/login.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { MenuItem } from 'primeng/api';
+import { Menubar } from 'primeng/menubar';
+import { BadgeModule } from 'primeng/badge';
+import { AvatarModule } from 'primeng/avatar';
+import { InputTextModule } from 'primeng/inputtext';
+import { CommonModule } from '@angular/common';
+import { Ripple } from 'primeng/ripple';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    MatToolbar,
-    MatIcon,
     NgIf,
-    MatSidenavContainer,
-    MatSidenav,
-    MatSidenavContent,
-    TranslatePipe,
-    MatDivider,
     RouterOutlet,
-    FooterComponent,
-    MatButton,
     RouterLink,
-    MatIconButton
+    Menubar, BadgeModule, AvatarModule, InputTextModule, Ripple, CommonModule
   ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
 
   constructor(
-    private readonly router: Router,
-    private readonly snackBar: MatSnackBar,
-    private readonly loginService: LoginService,
-    private readonly translate: TranslateService) { }
+    private readonly router: Router) { }
 
-  logout() {
-    this.loginService.logout();
-    this.openSnackBar("Logout feito com sucesso!");
-    this.router.navigate(['/']);
-  }
+  items: MenuItem[] | undefined;
 
-  openSnackBar(message: string) {
-    this.translate.get('close').subscribe((res: string) => {
-      this.snackBar.open(message, res, {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-      });
-    });
-  }
+    ngOnInit() {
+      this.items = [
+        {
+          label: 'Home',
+          icon: 'pi pi-home'
+        },
+        {
+          label: 'Cadastros',
+          icon: 'pi pi-search',
+          items: [
+            {
+              label: 'Carteira de Clientes',
+              icon: 'pi pi-address-book'
+            }
+          ]
+        }
+      ]
+    }
 
 }

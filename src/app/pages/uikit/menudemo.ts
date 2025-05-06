@@ -43,8 +43,8 @@ import { InputIcon, InputIconModule } from 'primeng/inputicon';
             <p-menubar [model]="nestedMenuItems">
                 <ng-template #end>
                     <p-iconfield>
-                        <p-inputicon class="pi pi-search" />
-                        <input type="text" pInputText placeholder="Search" />
+                        <p-inputicon class="pi pi-search"/>
+                        <input type="text" pInputText placeholder="Search"/>
                     </p-iconfield>
                 </ng-template>
             </p-menubar>
@@ -99,7 +99,8 @@ import { InputIcon, InputIconModule } from 'primeng/inputicon';
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">Overlay Menu</div>
                     <p-menu #menu [popup]="true" [model]="overlayMenuItems"></p-menu>
-                    <button type="button" pButton icon="pi pi-chevron-down" label="Options" (click)="menu.toggle($event)" style="width:auto"></button>
+                    <button type="button" pButton icon="pi pi-chevron-down" pButtonLabel="Options"
+                            (click)="menu.toggle($event)" style="width:auto"></button>
                 </div>
 
                 <div class="card" #anchor>
@@ -114,16 +115,16 @@ import { InputIcon, InputIconModule } from 'primeng/inputicon';
             <div class="md:w-1/2">
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">MegaMenu | Horizontal</div>
-                    <p-megamenu [model]="megaMenuItems" />
+                    <p-megamenu [model]="megaMenuItems"></p-megamenu>
 
                     <div class="font-semibold text-xl mb-4 mt-8">MegaMenu | Vertical</div>
-                    <p-megamenu [model]="megaMenuItems" orientation="vertical" />
+                    <p-megamenu [model]="megaMenuItems" orientation="vertical"></p-megamenu>
                 </div>
             </div>
             <div class="md:w-1/2">
                 <div class="card">
                     <div class="font-semibold text-xl mb-4">PanelMenu</div>
-                    <p-panelmenu [model]="panelMenuItems" />
+                    <p-panelmenu [model]="panelMenuItems"></p-panelmenu>
                 </div>
             </div>
         </div>

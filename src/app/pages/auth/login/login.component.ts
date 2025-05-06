@@ -1,70 +1,82 @@
 import { Component } from '@angular/core';
-import { DefaultLoginLayoutComponent } from '../default-login-layout/default-login-layout.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { PrimaryInputComponent } from '../primary-input/primary-input.component';
-import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {TranslateService} from '@ngx-translate/core';
-//import { ToastrService } from 'ngx-toastr';
-
-interface LoginForm {
-  username: FormControl,
-  password: FormControl
-}
+import {FormsModule} from '@angular/forms';
+import {Router, RouterModule} from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputTextModule } from 'primeng/inputtext';
+import { PasswordModule } from 'primeng/password';
+import { RippleModule } from 'primeng/ripple';
+import {AppFloatingConfigurator} from "../../../layout/component/app.floatingconfigurator";
+import {LoginService} from "../../../services/login.service";
+import {MessageService} from "primeng/api";
+import {Message, MessageModule} from "primeng/message";
+import {ToastModule} from "primeng/toast";
+import {CommonModule, NgIf} from "@angular/common";
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    DefaultLoginLayoutComponent,
-    ReactiveFormsModule,
-    PrimaryInputComponent
-  ],
-  providers: [
-    LoginService
-  ],
-  templateUrl: './login.component.html'
+    selector: 'app-login',
+    standalone: true,
+    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, Message, NgIf, ToastModule],
+    templateUrl: './login.component.html',
+    providers: [LoginService, MessageService]
 })
 export class LoginComponent {
-  loginForm!: FormGroup<LoginForm>;
 
-  constructor(
-    private readonly router: Router,
-    private readonly loginService: LoginService,
-    private readonly snackBar: MatSnackBar,
-    private readonly translate: TranslateService
-  ){
-    this.loginForm = new FormGroup({
-      username: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)])
-    })
-  }
+    constructor(
+      private readonly loginService: LoginService,
+      private readonly router: Router,
+      private readonly service: MessageService
+    ){
+    }
 
-  submit(){
-    this.loginService.login(this.loginForm.value.username, this.loginForm.value.password).subscribe({
-      next: () => {
-        this.openSnackBar("Login feito com sucesso!");
-        this.router.navigate(['/guests']);
-      },
-      error: (error) => {
-        const errorMessage = error.error ? error.error : "Erro inesperado! Tente novamente mais tarde";
-        this.openSnackBar(errorMessage);
-      }
-    })
-  }
+    email: string = '';
 
-  navigate(){
-    this.router.navigate(["signup"])
-  }
+    password: string = '';
 
-  openSnackBar(message: string) {
-    this.translate.get('close').subscribe((res: string) => {
-      this.snackBar.open(message, res, {
-        duration: 3000,
-        horizontalPosition: 'right',
-        verticalPosition: 'top',
-      });
-    });
-  }
+    checked: boolean = false;
+
+    visible: any = new Map();
+
+    errorMessage: string = '';
+
+    isLoading: boolean = false;
+
+    login() {
+        if (this.isLoading) return;
+        this.isLoading = true;
+        this.loginService.login(this.email, this.password).subscribe({
+            next: () => {
+                this.service.add({ severity: 'success', summary: 'Success Message', detail: 'Message sent' });
+                this.router.navigate(['/logedin']);
+            },
+            error: (error) => {
+                debugger;
+                if(error.status == 401){
+                    this.errorMessage = "Login Failed. Please check your credentials.";
+                } else {
+                    this.errorMessage = "Unexpected error. Please try again later.";
+                }
+                this.showMessage();
+            }
+        })
+        this.isLoading = false;
+    }
+
+    showMessage(  ) {
+        this.visible.set(true);
+
+        setTimeout(() => {
+            this.visible.set(false);
+        }, 3500);
+    }
+
+    forgotPassword(event: Event) {
+        event.preventDefault();
+        debugger;
+        // Implement forgot password logic
+        this.service.add({ severity: 'warn', summary: 'Feature not implemented yet', detail: 'Future Updates Coming...' });
+    }
+
+
+    protected readonly onsubmit = onsubmit;
 }
